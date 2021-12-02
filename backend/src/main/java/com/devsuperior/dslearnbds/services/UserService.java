@@ -29,10 +29,12 @@ import com.devsuperior.dslearnbds.services.exceptions.ResourceNotFoundException;
 		@Autowired
 		private UserRepository repository;
 		
-		
+		@Autowired
+		private AuthService authService;
 		
 		@Transactional(readOnly = true)
 		public UserDTO findById(Long id) {
+			authService.valideteSelfOrAdmin(id);
 			Optional<User> obj = repository.findById(id);
 			User entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 			return new UserDTO(entity);
